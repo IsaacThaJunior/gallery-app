@@ -1,10 +1,9 @@
 .main {
   display: flex;
-  flex-direction: column;
+
   justify-content: space-between;
   align-items: center;
-  padding: 6rem;
-  min-height: 100vh;
+  padding: 3rem;
 }
 
 .description {
@@ -59,6 +58,14 @@
   transition: transform 200ms;
 }
 
+.button{
+  border: none;
+  padding: 0.7rem;
+  border-radius: 10px;
+  background-color: #fff;
+  color: black;
+}
+
 .card h2 {
   font-weight: 600;
   margin-bottom: 0.7rem;
@@ -97,7 +104,7 @@
 
 .center::before,
 .center::after {
-  content: '';
+  content: "";
   left: 50%;
   position: absolute;
   filter: blur(45px);
