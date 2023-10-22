@@ -10,14 +10,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Images {
-  id     String  @id @default(auto()) @map("_id") @db.ObjectId
-  images Image[]
-}
-
 model Image {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  title    String?
-  Images   Images? @relation(fields: [imagesId], references: [id])
-  imagesId String? @db.ObjectId
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  title  String?
+  Images String[]
 }
