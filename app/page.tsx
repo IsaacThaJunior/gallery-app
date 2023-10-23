@@ -3,6 +3,8 @@
 import { Typography } from "@mui/material";
 import React from "react";
 import styles from "./page.module.css";
+import Image from "next/image";
+
 import axios from "axios";
 import { useState, useEffect } from "react";
 
@@ -28,8 +30,15 @@ export default function page() {
   }, []); // This will run whenever uploadedImages change
   return (
     <>
-      {uploadedImages.length}
       <Typography>All Images</Typography>
+
+      <div>
+        {uploadedImages.map((url, index) => (
+          <div key={index}>
+            <Image src={url} alt={`Image ${index}`} width={300} height={200} />
+          </div>
+        ))}
+      </div>
     </>
   );
 }

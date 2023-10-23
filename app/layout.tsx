@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { Inter } from "next/font/google";
-import "./globals.css";
 import styles from "./page.module.css";
 
 import * as React from "react";
@@ -121,7 +120,7 @@ export default function RootLayout({
           </Box>
         </Box>
 
-        <div className={styles.main}>{children}</div>
+        <div>{children}</div>
       </body>
     </html>
   );
