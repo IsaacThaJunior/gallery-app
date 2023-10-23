@@ -27,14 +27,19 @@ const Root = styled("div")({
   height: "200px",
 });
 
+const TextDiv = styled("div")({
+  textAlign: "center",
+  marginTop: "2rem",
+  marginBottom: "2rem",
+});
+
 const Overlay = styled("div")({
-  // display: "none",
   position: "absolute",
   top: 0,
   left: 0,
   textAlign: "center",
   width: "100%",
-  height: "30%",
+  height: "20%",
   backgroundColor: "rgba(0, 0, 0, 0.5)",
   color: "white",
   justifyContent: "center",
@@ -119,13 +124,21 @@ export default function Home() {
       </Box>
 
       <main>
-        <div>
-          <Typography variant="h6">
-            Use the dropdown above to select your main image
-          </Typography>
-        </div>
+        {uploadedImages.length > 0 ? (
+          <TextDiv>
+            <Typography variant="h6">
+              Use the dropdown above to select your main image
+            </Typography>
+          </TextDiv>
+        ) : (
+          <TextDiv>
+            <Typography variant="h5">
+              No images yet. Please click the upload button to upload images
+            </Typography>
+          </TextDiv>
+        )}
 
-        <Grid container spacing={3}>
+        <Grid container justifyContent="center" spacing={3}>
           {uploadedImages.map((url, index) => (
             <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
               <Root

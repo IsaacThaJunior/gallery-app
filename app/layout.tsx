@@ -88,10 +88,12 @@ export default function RootLayout({
                 Gallery App
               </Typography>
               <Box sx={{ display: { xs: "none", sm: "block", gap: "223px" } }}>
-                <Link style={{ marginRight: "30px" }} href="/">
+                <Link style={{ marginRight: "30px", color: "white" }} href="/">
                   All Images
                 </Link>
-                <Link href="/gallery">Upload Images</Link>
+                <Link style={{ color: "white" }} href="/gallery">
+                  Upload Images
+                </Link>
               </Box>
             </Toolbar>
           </AppBar>

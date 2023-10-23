@@ -1,6 +1,6 @@
 "use client";
 
-import { Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import React from "react";
 import styles from "./page.module.css";
 import Image from "next/image";
@@ -29,16 +29,22 @@ export default function page() {
     sendImagesToDatabase();
   }, []); // This will run whenever uploadedImages change
   return (
-    <>
-      <Typography>All Images</Typography>
+    <Box
+      sx={{
+        px: 6,
+      }}
+    >
+      <Typography variant="h5" marginBottom="2rem" textAlign="center">
+        All Images
+      </Typography>
 
-      <div>
+      <Grid container justifyContent="center" spacing={3}>
         {uploadedImages.map((url, index) => (
-          <div key={index}>
+          <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
             <Image src={url} alt={`Image ${index}`} width={300} height={200} />
-          </div>
+          </Grid>
         ))}
-      </div>
-    </>
+      </Grid>
+    </Box>
   );
 }
