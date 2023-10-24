@@ -72,7 +72,7 @@ export default function Home() {
     }
   }, [uploadedImages]); // This will run whenever uploadedImages change
 
-  const handleUpload = async (result: UploadResult) => {
+  const handleUpload = async (result: any) => {
     const mappedData = result?.info?.files.map((file: any) => {
       return file.uploadInfo.secure_url;
     });

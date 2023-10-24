@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import React from "react";
 import styles from "./page.module.css";
 import Image from "next/image";
@@ -12,22 +12,44 @@ export default function page() {
   const [uploadedImages, setUploadedImages] = useState([] as string[]);
 
   useEffect(() => {
-    // Create a function to send all images to the database
-    const sendImagesToDatabase = async () => {
-      try {
-        const request = await axios.get("/api/images");
-        const allImages = request.data.map((image: any) => image.Images).flat();
-        console.log(allImages);
-        setUploadedImages(allImages);
-      } catch (error) {
-        console.error("Error fetching images from the database:", error);
-      }
-    };
-
-    // Check if there are images to send and then call the function
-
     sendImagesToDatabase();
   }, []); // This will run whenever uploadedImages change
+
+  const sendImagesToDatabase = async () => {
+    try {
+      const request = await axios.get("/api/images");
+      const allImages = request.data.map((image: any) => image.Images).flat();
+      setUploadedImages(allImages);
+    } catch (error) {
+      console.error("Error fetching images from the database:", error);
+    }
+  };
+
+  const deleteImage = async (imageId: any) => {
+    const answer = await confirm("Are you sure you want to delete this image");
+    const requestData = {
+      index: imageId,
+    };
+    if (answer === true) {
+      //   try {
+      axios
+        .delete("/api/images", {
+          data: requestData,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            sendImagesToDatabase();
+            console.log("Image deleted successfully");
+          } else {
+            console.error("Error deleting image:", response.status);
+          }
+        })
+        .catch((error) => {
+          console.error("Error sending DELETE request:", error);
+        });
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -41,7 +63,22 @@ export default function page() {
       <Grid container justifyContent="center" spacing={3}>
         {uploadedImages.map((url, index) => (
           <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
-            <Image src={url} alt={`Image ${index}`} width={300} height={200} />
+            <div>
+              <Image
+                src={url}
+                alt={`Image ${index}`}
+                width={300}
+                height={200}
+              />
+
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => deleteImage(index)} // Pass the image ID to the delete function
+              >
+                Delete
+              </Button>
+            </div>
           </Grid>
         ))}
       </Grid>

@@ -1,7 +1,6 @@
 import prisma from "@/prisma/prisma";
 
 export const GET = async (req: Request) => {
-  console.log("Someone is searching");
   const allImages = await prisma.image.findMany();
   return new Response(JSON.stringify(allImages), { status: 200 });
 };
@@ -17,4 +16,33 @@ export const POST = async (req: Request) => {
   });
 
   return new Response(JSON.stringify(postedImages), { status: 201 });
+};
+export const DELETE = async (req: Request) => {
+  const { index } = await req.json();
+
+  try {
+    const matchingImage = await prisma.image.findMany({});
+    const consolidatedImages = matchingImage
+      .map((image) => image.Images)
+      .flat();
+
+    console.log(consolidatedImages);
+    const removed = consolidatedImages.splice(index, 1);
+
+    const deleteEverything = await prisma.image.deleteMany();
+    console.log(deleteEverything);
+
+    const createdImages = await prisma.image.create({
+      data: {
+        Images: removed,
+      },
+    });
+
+    console.log(createdImages);
+
+    return new Response("Image deleted", { status: 200 });
+  } catch (error) {
+    console.error("Error deleting image:", error);
+    return new Response("Error deleting image", { status: 500 });
+  }
 };
