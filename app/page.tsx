@@ -56,7 +56,7 @@ export default function page() {
         px: 6,
       }}
     >
-      <Typography variant="h5" marginBottom="2rem" textAlign="center">
+      <Typography variant="h4" marginBottom="2rem" textAlign="center">
         All Images
       </Typography>
 
