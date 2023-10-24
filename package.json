@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "npx typesync && git diff --exit-code --quiet HEAD package.json || yarn --ignore-scripts"
+    "postinstall": "npx typesync && prisma generate && git diff --exit-code --quiet HEAD package.json || yarn --ignore-scripts"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
