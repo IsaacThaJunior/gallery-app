@@ -26,25 +26,18 @@ export const DELETE = async (req: Request) => {
       .map((image) => image.Images)
       .flat();
 
-    console.log("first one", consolidatedImages);
-    const removed = consolidatedImages.splice(index, 1);
-    console.log(removed);
-    console.log("second one", consolidatedImages);
+    consolidatedImages.splice(index, 1);
 
     const deleteEverything = await prisma.image.deleteMany();
-    console.log(deleteEverything);
 
-    const createdImages = await prisma.image.create({
+    await prisma.image.create({
       data: {
         Images: consolidatedImages,
       },
     });
 
-    console.log(createdImages);
-
     return new Response("Image deleted", { status: 200 });
   } catch (error) {
-    console.error("Error deleting image:", error);
     return new Response("Error deleting image", { status: 500 });
   }
 };
