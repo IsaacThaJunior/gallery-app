@@ -7,6 +7,7 @@ import Image from "next/image";
 
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { deleteFromDB, getFromDB } from "@/utils/connectToDb";
 
 export default function page() {
   const [uploadedImages, setUploadedImages] = useState([] as string[]);
@@ -19,9 +20,9 @@ export default function page() {
   const sendImagesToDatabase = async () => {
     try {
       setLoading(true);
-      const request = await axios.get("/api/images");
-      const allImages = request.data.map((image: any) => image.Images).flat();
-      setUploadedImages(allImages);
+      const request = await getFromDB();
+      console.log(request);
+      setUploadedImages(request);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching images from the database:", error);
@@ -29,27 +30,23 @@ export default function page() {
   };
 
   const deleteImage = async (imageId: any) => {
-    const answer = await confirm("Are you sure you want to delete this image");
+    const answer = confirm("Are you sure you want to delete this image");
     const requestData = {
       index: imageId,
     };
     if (answer === true) {
-      //   try {
-      axios
-        .delete("/api/images", {
-          data: requestData,
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            sendImagesToDatabase();
-            console.log("Image deleted successfully");
-          } else {
-            console.error("Error deleting image:", response.status);
-          }
-        })
-        .catch((error) => {
-          console.error("Error sending DELETE request:", error);
-        });
+      try {
+        const deleteDB: any = await deleteFromDB(requestData);
+        console.log(deleteDB);
+        if (deleteDB.status === 200) {
+          sendImagesToDatabase();
+          console.log("Image deleted successfully");
+        } else {
+          console.error("Error deleting image:", deleteDB.status);
+        }
+      } catch (error) {
+        console.error("Error sending DELETE request:", error);
+      }
     }
   };
 
