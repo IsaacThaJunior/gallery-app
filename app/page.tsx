@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 
 export default function page() {
   const [uploadedImages, setUploadedImages] = useState([] as string[]);
+  const [loading, setLoading] = useState<Boolean>(false);
 
   useEffect(() => {
     sendImagesToDatabase();
@@ -17,9 +18,11 @@ export default function page() {
 
   const sendImagesToDatabase = async () => {
     try {
+      setLoading(true);
       const request = await axios.get("/api/images");
       const allImages = request.data.map((image: any) => image.Images).flat();
       setUploadedImages(allImages);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching images from the database:", error);
     }
@@ -60,28 +63,38 @@ export default function page() {
         All Images
       </Typography>
 
-      <Grid container justifyContent="center" spacing={3}>
-        {uploadedImages.map((url, index) => (
-          <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
-            <div>
-              <Image
-                src={url}
-                alt={`Image ${index}`}
-                width={300}
-                height={200}
-              />
+      {loading === true ? (
+        <Typography variant="h5" marginBottom="2rem" textAlign="center">
+          Loading! Please wait
+        </Typography>
+      ) : (
+        <Grid container justifyContent="center" spacing={15}>
+          {uploadedImages.map((url, index) => (
+            <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
+              <div>
+                <Image
+                  src={url}
+                  alt={`Image ${index}`}
+                  width={300}
+                  height={200}
+                />
 
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => deleteImage(index)} // Pass the image ID to the delete function
-              >
-                Delete
-              </Button>
-            </div>
-          </Grid>
-        ))}
-      </Grid>
+                <Button
+                  variant="contained"
+                  color="error"
+                  sx={{
+                    ml: 12,
+                    mt: 3,
+                  }}
+                  onClick={() => deleteImage(index)} // Pass the image ID to the delete function
+                >
+                  Delete
+                </Button>
+              </div>
+            </Grid>
+          ))}
+        </Grid>
+      )}
     </Box>
   );
 }

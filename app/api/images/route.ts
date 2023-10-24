@@ -26,15 +26,17 @@ export const DELETE = async (req: Request) => {
       .map((image) => image.Images)
       .flat();
 
-    console.log(consolidatedImages);
+    console.log("first one", consolidatedImages);
     const removed = consolidatedImages.splice(index, 1);
+    console.log(removed);
+    console.log("second one", consolidatedImages);
 
     const deleteEverything = await prisma.image.deleteMany();
     console.log(deleteEverything);
 
     const createdImages = await prisma.image.create({
       data: {
-        Images: removed,
+        Images: consolidatedImages,
       },
     });
 
