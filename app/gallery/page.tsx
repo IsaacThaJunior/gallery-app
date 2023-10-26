@@ -1,11 +1,21 @@
 "use client";
-import { Typography, Select, MenuItem, Button, Box, Grid } from "@mui/material";
+import {
+  Typography,
+  Select,
+  MenuItem,
+  Box,
+  TextField,
+  Grid,
+  Button,
+  Container,
+} from "@mui/material";
 import Image from "next/image";
 import { useState, useEffect, SetStateAction } from "react";
 import axios from "axios";
 import { CldUploadButton } from "next-cloudinary";
 import styles from "../page.module.css";
 import { styled } from "@mui/system";
+import Form from "../components/Form";
 
 declare global {
   var cloudinary: any;
@@ -124,48 +134,97 @@ export default function Home() {
       </Box>
 
       <main>
-        {uploadedImages.length > 0 ? (
-          <TextDiv>
-            <Typography variant="h6">
-              Use the dropdown above to select your main image
-            </Typography>
-          </TextDiv>
-        ) : (
-          <TextDiv>
-            <Typography variant="h5">
-              No images yet. Please click the upload button to upload images
-            </Typography>
-          </TextDiv>
-        )}
-
-        <Grid container justifyContent="center" spacing={3}>
-          {uploadedImages.map((url, index) => (
-            <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
-              <Root
-                key={index}
-                className={styles.mainImage}
-                onClick={(e) =>
-                  handleMainImageChange({ target: { value: url } })
-                }
-              >
-                {mainImage === url && (
-                  <Overlay>
-                    <Typography variant="h6" color="white">
-                      Main Image
-                    </Typography>
-                  </Overlay>
-                )}
-
-                <Image
-                  src={url}
-                  alt={`Image ${index}`}
-                  width={300}
-                  height={200}
+        <Container>
+          <form>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Address"
+                  variant="outlined"
+                  name="address"
+                  // Add any necessary input properties and event handlers
                 />
-              </Root>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="Number of Bedrooms"
+                  variant="outlined"
+                  type="number"
+                  name="bedrooms"
+                  // Add any necessary input properties and event handlers
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="Price"
+                  variant="outlined"
+                  type="number"
+                  name="price"
+                  // Add any necessary input properties and event handlers
+                />
+              </Grid>
+              {/* Add more fields for other house information here */}
             </Grid>
-          ))}
-        </Grid>
+
+            {uploadedImages.length > 0 ? (
+              <TextDiv>
+                <Typography variant="h6">
+                  Use the dropdown above to select your main image
+                </Typography>
+              </TextDiv>
+            ) : (
+              <TextDiv>
+                <Typography variant="h5">
+                  No images yet. Please click the upload button to upload images
+                </Typography>
+              </TextDiv>
+            )}
+
+            <Grid container justifyContent="center" spacing={3}>
+              {uploadedImages.map((url, index) => (
+                <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
+                  <Root
+                    key={index}
+                    className={styles.mainImage}
+                    onClick={(e) =>
+                      handleMainImageChange({ target: { value: url } })
+                    }
+                  >
+                    {mainImage === url && (
+                      <Overlay>
+                        <Typography variant="h6" color="white">
+                          Main Image
+                        </Typography>
+                      </Overlay>
+                    )}
+
+                    <Image
+                      src={url}
+                      alt={`Image ${index}`}
+                      width={300}
+                      height={200}
+                    />
+                  </Root>
+                </Grid>
+              ))}
+            </Grid>
+
+            <Grid container justifyContent="center">
+              <Button
+                sx={{ mt: "1rem", px: 7 }}
+                variant="contained"
+                color="primary"
+                type="submit"
+                disabled={uploadedImages.length === 0}
+              >
+                Submit
+              </Button>
+            </Grid>
+          </form>
+        </Container>
       </main>
     </>
   );
