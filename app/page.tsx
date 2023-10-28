@@ -21,7 +21,6 @@ export default function page() {
     try {
       setLoading(true);
       const request = await getFromDB();
-      console.log(request);
       console.log("Something");
       setUploadedImages(request);
       setLoading(false);
