@@ -11,7 +11,7 @@ import { deleteFromDB, getFromDB } from "@/utils/connectToDb";
 
 export default function page() {
   const [uploadedImages, setUploadedImages] = useState([] as string[]);
-  const [loading, setLoading] = useState<Boolean>(false);
+  const [loading, setLoading] = useState<Boolean>(true);
 
   useEffect(() => {
     sendImagesToDatabase();
@@ -22,6 +22,7 @@ export default function page() {
       setLoading(true);
       const request = await getFromDB();
       console.log(request);
+      console.log("Something");
       setUploadedImages(request);
       setLoading(false);
     } catch (error) {
@@ -66,7 +67,7 @@ export default function page() {
         </Typography>
       ) : (
         <Grid container justifyContent="center" spacing={15}>
-          {uploadedImages.map((url, index) => (
+          {uploadedImages?.map((url, index) => (
             <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
               <div>
                 <Image
@@ -91,6 +92,19 @@ export default function page() {
             </Grid>
           ))}
         </Grid>
+      )}
+
+      {loading === false && uploadedImages.length === 0 && (
+        <Typography
+          variant="h6"
+          sx={{
+            mt: 20,
+          }}
+          textAlign="center"
+        >
+          No images in the Database. Please Upload images and then view them
+          here
+        </Typography>
       )}
     </Box>
   );

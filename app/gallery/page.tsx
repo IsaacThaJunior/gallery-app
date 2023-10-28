@@ -140,9 +140,9 @@ export default function Home() {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label="Address"
+                  label="Label your images"
                   variant="outlined"
-                  name="address"
+                  name="Label your images"
                   // Add any necessary input properties and event handlers
                 />
               </Grid>
