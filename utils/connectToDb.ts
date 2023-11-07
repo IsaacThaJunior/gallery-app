@@ -1,13 +1,12 @@
+"use server";
+
 import axios from "axios";
+import prisma from "@/prisma/prisma";
 
 export const getFromDB = async () => {
-  try {
-    const request = await axios.get("/api/images");
-    const allImages = request.data.map((image: any) => image.Images).flat();
-    return allImages;
-  } catch (error) {
-    console.error("Error fetching images from the database:", error);
-  }
+  const image = await prisma.image.findMany();
+  if (!image) return null;
+  return image;
 };
 
 export const deleteFromDB = async (requestData: any) => {

@@ -11,7 +11,10 @@ datasource db {
 }
 
 model Image {
-  id     String   @id @default(auto()) @map("_id") @db.ObjectId
-  title  String?
-  Images String[]
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  Images        String
+  address       String
+  label         String
+  numberOfRooms Int
+  price         Int
 }

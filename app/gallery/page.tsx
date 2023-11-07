@@ -137,13 +137,20 @@ export default function Home() {
         <Container>
           <form>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="House Address"
+                  variant="outlined"
+                  name="House Address"
+                />
+              </Grid>
+              <Grid item xs={6}>
                 <TextField
                   fullWidth
                   label="Label your images"
                   variant="outlined"
                   name="Label your images"
-                  // Add any necessary input properties and event handlers
                 />
               </Grid>
               <Grid item xs={6}>

@@ -5,12 +5,11 @@ import React from "react";
 import styles from "./page.module.css";
 import Image from "next/image";
 
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { deleteFromDB, getFromDB } from "@/utils/connectToDb";
 
 export default function page() {
-  const [uploadedImages, setUploadedImages] = useState([] as string[]);
+  const [uploadedImages, setUploadedImages] = useState<any>();
   const [loading, setLoading] = useState<Boolean>(true);
 
   useEffect(() => {
@@ -20,8 +19,9 @@ export default function page() {
   const sendImagesToDatabase = async () => {
     try {
       setLoading(true);
+      console.log("starting");
       const request = await getFromDB();
-      console.log("Something");
+      console.log(request);
       setUploadedImages(request);
       setLoading(false);
     } catch (error) {
@@ -66,12 +66,12 @@ export default function page() {
         </Typography>
       ) : (
         <Grid container justifyContent="center" spacing={15}>
-          {uploadedImages?.map((url, index) => (
-            <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
+          {uploadedImages?.map((image: any) => (
+            <Grid item key={image.id} xs={12} sm={6} md={4} lg={3}>
               <div>
                 <Image
-                  src={url}
-                  alt={`Image ${index}`}
+                  src={image.Images}
+                  alt={`Image ${image.address}`}
                   width={300}
                   height={200}
                 />
@@ -83,7 +83,7 @@ export default function page() {
                     ml: 12,
                     mt: 3,
                   }}
-                  onClick={() => deleteImage(index)} // Pass the image ID to the delete function
+                  onClick={() => deleteImage(image.id)} // Pass the image ID to the delete function
                 >
                   Delete
                 </Button>

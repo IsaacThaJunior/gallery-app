@@ -6,38 +6,18 @@ export const GET = async (req: Request) => {
 };
 
 export const POST = async (req: Request) => {
-  const { title, Images } = await req.json();
+  const { address, label, numberOfRooms, price, Images } = await req.json();
 
   const postedImages = await prisma.image.create({
     data: {
-      title,
       Images,
+      price,
+      address,
+      label,
+      numberOfRooms,
     },
   });
 
   return new Response(JSON.stringify(postedImages), { status: 201 });
 };
-export const DELETE = async (req: Request) => {
-  const { index } = await req.json();
-
-  try {
-    const matchingImage = await prisma.image.findMany({});
-    const consolidatedImages = matchingImage
-      .map((image) => image.Images)
-      .flat();
-
-    consolidatedImages.splice(index, 1);
-
-    const deleteEverything = await prisma.image.deleteMany();
-
-    await prisma.image.create({
-      data: {
-        Images: consolidatedImages,
-      },
-    });
-
-    return new Response("Image deleted", { status: 200 });
-  } catch (error) {
-    return new Response("Error deleting image", { status: 500 });
-  }
-};
+export const DELETE = async (req: Request) => {};
