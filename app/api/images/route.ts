@@ -8,6 +8,15 @@ export const GET = async (req: Request) => {
 export const POST = async (req: Request) => {
   const { address, label, numberOfRooms, price, Images } = await req.json();
 
+  if (!address || !label || !numberOfRooms || !price) {
+    return new Response(
+      "Images must have a an address, label, number of rooms and a price",
+      {
+        status: 400,
+      }
+    );
+  }
+
   const postedImages = await prisma.image.create({
     data: {
       Images,

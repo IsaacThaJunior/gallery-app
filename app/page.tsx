@@ -7,6 +7,7 @@ import Image from "next/image";
 
 import { useState, useEffect } from "react";
 import { deleteFromDB, getFromDB } from "@/utils/connectToDb";
+import Link from "next/link";
 
 export default function page() {
   const [uploadedImages, setUploadedImages] = useState<any>();
@@ -19,9 +20,7 @@ export default function page() {
   const sendImagesToDatabase = async () => {
     try {
       setLoading(true);
-      console.log("starting");
       const request = await getFromDB();
-      console.log(request);
       setUploadedImages(request);
       setLoading(false);
     } catch (error) {
@@ -69,14 +68,17 @@ export default function page() {
           {uploadedImages?.map((image: any) => (
             <Grid item key={image.id} xs={12} sm={6} md={4} lg={3}>
               <div>
-                <Image
-                  src={image.Images}
-                  alt={`Image ${image.address}`}
-                  width={300}
-                  height={200}
-                />
+                <Link href="">
+                  <Image
+                    style={{ cursor: "pointer" }}
+                    src={image.Images}
+                    alt={`Image ${image.address}`}
+                    width={300}
+                    height={300}
+                  />
+                </Link>
 
-                <Button
+                {/* <Button
                   variant="contained"
                   color="error"
                   sx={{
@@ -86,7 +88,7 @@ export default function page() {
                   onClick={() => deleteImage(image.id)} // Pass the image ID to the delete function
                 >
                   Delete
-                </Button>
+                </Button> */}
               </div>
             </Grid>
           ))}

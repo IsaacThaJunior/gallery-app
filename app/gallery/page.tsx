@@ -15,18 +15,10 @@ import axios from "axios";
 import { CldUploadButton } from "next-cloudinary";
 import styles from "../page.module.css";
 import { styled } from "@mui/system";
-import Form from "../components/Form";
+import { useForm } from "react-hook-form";
 
 declare global {
   var cloudinary: any;
-}
-
-interface UploadResult {
-  info: {
-    files: [];
-    public_id: string;
-    secure_url: string;
-  };
 }
 
 const uploadPreset = "sj9mklh4";
@@ -65,6 +57,19 @@ export default function Home() {
   const [uploadedImages, setUploadedImages] = useState([] as string[]);
   const [mainImage, setMainImage] = useState("");
 
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const address = watch("address");
+  const label = watch("label");
+  const numberOfRooms = watch("numberOfRooms");
+  const price = watch("price");
+
   useEffect(() => {
     // Create a function to send all images to the database
     const sendImagesToDatabase = async () => {
@@ -75,6 +80,8 @@ export default function Home() {
         console.error("Error saving images to the database:", error);
       }
     };
+
+    const submitHandler = () => {}
 
     // Check if there are images to send and then call the function
     if (uploadedImages.length > 0) {
@@ -142,16 +149,26 @@ export default function Home() {
                   fullWidth
                   label="House Address"
                   variant="outlined"
-                  name="House Address"
+                  {...register("address", {
+                    required: "Required",
+                  })}
+                  name="address"
+                  error={!!errors.address}
                 />
+                {errors.address?.message && <span>This field is required</span>}
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   fullWidth
                   label="Label your images"
                   variant="outlined"
-                  name="Label your images"
+                  {...register("label", {
+                    required: "Required",
+                  })}
+                  name="label"
+                  error={!!errors.label}
                 />
+                {errors.address?.message && <span>This field is required</span>}
               </Grid>
               <Grid item xs={6}>
                 <TextField
@@ -159,9 +176,13 @@ export default function Home() {
                   label="Number of Bedrooms"
                   variant="outlined"
                   type="number"
-                  name="bedrooms"
-                  // Add any necessary input properties and event handlers
+                  {...register("numberOfRooms", {
+                    required: "Required",
+                  })}
+                  name="numberOfRooms"
+                  error={!!errors.numberOfRooms}
                 />
+                {errors.address?.message && <span>This field is required</span>}
               </Grid>
               <Grid item xs={6}>
                 <TextField
@@ -169,11 +190,14 @@ export default function Home() {
                   label="Price"
                   variant="outlined"
                   type="number"
+                  {...register("price", {
+                    required: "Required",
+                  })}
                   name="price"
-                  // Add any necessary input properties and event handlers
+                  error={!!errors.price}
                 />
+                {errors.address?.message && <span>This field is required</span>}
               </Grid>
-              {/* Add more fields for other house information here */}
             </Grid>
 
             {uploadedImages.length > 0 ? (
@@ -225,7 +249,7 @@ export default function Home() {
                 variant="contained"
                 color="primary"
                 type="submit"
-                disabled={uploadedImages.length === 0}
+                // disabled={uploadedImages.length === 0}
               >
                 Submit
               </Button>
