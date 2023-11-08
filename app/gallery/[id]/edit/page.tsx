@@ -11,10 +11,11 @@ import Image from "next/image";
 import { useState, useEffect, SetStateAction } from "react";
 import axios from "axios";
 import { CldUploadButton } from "next-cloudinary";
-import styles from "../page.module.css";
+import styles from "../../../page.module.css";
 import { styled } from "@mui/system";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { getOneImageFromDB } from "@/utils/connectToDb";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 
 declare global {
   var cloudinary: any;
@@ -31,10 +32,34 @@ const TextDiv = styled("div")({
 export default function Home() {
   const router = useRouter();
   const [uploadedImages, setUploadedImages] = useState<string>();
+  const [request, setRequest] = useState<any>();
+  const [loadings, setLoadings] = useState<Boolean>(true);
+  const params = useParams();
+  const pictureID = params.id!;
+
+  useEffect(() => {
+    if (pictureID) {
+      getImage(pictureID);
+    }
+  }, []);
+
+  const getImage = async (id: any) => {
+    setLoadings(true);
+    const request = await getOneImageFromDB(id);
+    if (request) {
+      setRequest(request);
+      setValue("price", request.price);
+      setValue("numberOfRooms", request.numberOfRooms);
+      setValue("address", request.address);
+      setValue("label", request.label);
+    }
+    setLoadings(false);
+  };
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -56,18 +81,17 @@ export default function Home() {
       numberOfRooms: +values.numberOfRooms,
       price: +values.price,
       address: values.address.trim(),
-      Images: uploadedImages,
+      Images: uploadedImages || request.Images as string,
       label: values.label.trim(),
     };
 
     try {
-      await axios.post("/api/images", data);
-      console.log("Images saved to the database!");
+      await axios.patch(`/api/images/${pictureID}`, data);
+      console.log("Images Updated Successfully");
+      router.push("/");
     } catch (error) {
       console.error("Error saving images to the database:", error);
     }
-
-    router.push("/");
   };
 
   return (
@@ -80,7 +104,7 @@ export default function Home() {
           py: 3,
         }}
       >
-        <Typography variant="h5">Upload Section</Typography>
+        <Typography variant="h5">Edit the image Section</Typography>
 
         {/* {uploadedImages.length > 0 && (
           <SelectInput
@@ -166,7 +190,7 @@ export default function Home() {
               </Grid>
             </Grid>
 
-            {!uploadedImages && (
+            {!uploadedImages && !request && (
               <TextDiv>
                 <Typography variant="h5">
                   No images yet. Please click the upload button to upload images
@@ -185,6 +209,20 @@ export default function Home() {
                   />
                 </Grid>
               )}
+
+              {loadings === false &&
+                request &&
+                request.length !== 0 &&
+                !uploadedImages && (
+                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <Image
+                      src={request.Images}
+                      alt={`Image ${request}`}
+                      width={300}
+                      height={200}
+                    />
+                  </Grid>
+                )}
             </Grid>
 
             <Grid container justifyContent="center">

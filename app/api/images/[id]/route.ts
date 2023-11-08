@@ -18,6 +18,27 @@ export const GET = async (
   return new Response(JSON.stringify(image), { status: 200 });
 };
 
+export const PATCH = async (
+  req: Request,
+  { params }: { params: ImageParams }
+) => {
+  const { id } = params;
+  const { address, label, numberOfRooms, price, Images } = await req.json();
+  const updatedImage = await prisma.image.update({
+    where: {
+      id,
+    },
+    data: {
+      address,
+      label,
+      numberOfRooms,
+      price,
+      Images,
+    },
+  });
+  return new Response(JSON.stringify(updatedImage), { status: 201 });
+};
+
 export const DELETE = async (
   req: Request,
   { params }: { params: ImageParams }
