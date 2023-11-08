@@ -68,7 +68,7 @@ export default function page() {
           {uploadedImages?.map((image: any) => (
             <Grid item key={image.id} xs={12} sm={6} md={4} lg={3}>
               <div>
-                <Link href="">
+                <Link href={`/gallery/${image.id}`}>
                   <Image
                     style={{ cursor: "pointer" }}
                     src={image.Images}
