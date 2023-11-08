@@ -8,6 +8,7 @@ export const getFromDB = async () => {
   if (!image) return null;
   return image;
 };
+
 export const getOneImageFromDB = async (id: any) => {
   const image = await prisma.image.findUnique({
     where: {
@@ -18,9 +19,11 @@ export const getOneImageFromDB = async (id: any) => {
   return image;
 };
 
-export const deleteFromDB = async (requestData: any) => {
-  const request = axios.delete("/api/images", {
-    data: requestData,
+export const deleteFromDB = async (id: any) => {
+  const request = await prisma.image.delete({
+    where: {
+      id,
+    },
   });
   return request;
 };

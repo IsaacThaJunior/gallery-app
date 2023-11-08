@@ -28,27 +28,6 @@ export default function page() {
     }
   };
 
-  const deleteImage = async (imageId: any) => {
-    const answer = confirm("Are you sure you want to delete this image");
-    const requestData = {
-      index: imageId,
-    };
-    if (answer === true) {
-      try {
-        const deleteDB: any = await deleteFromDB(requestData);
-        console.log(deleteDB);
-        if (deleteDB.status === 200) {
-          sendImagesToDatabase();
-          console.log("Image deleted successfully");
-        } else {
-          console.error("Error deleting image:", deleteDB.status);
-        }
-      } catch (error) {
-        console.error("Error sending DELETE request:", error);
-      }
-    }
-  };
-
   return (
     <Box
       sx={{
@@ -68,7 +47,7 @@ export default function page() {
           {uploadedImages?.map((image: any) => (
             <Grid item key={image.id} xs={12} sm={6} md={4} lg={3}>
               <div>
-                <Link href={`/gallery/${image.id}`}>
+   done the deleting part            <Link href={`/gallery/${image.id}`}>
                   <Image
                     style={{ cursor: "pointer" }}
                     src={image.Images}
@@ -77,18 +56,6 @@ export default function page() {
                     height={300}
                   />
                 </Link>
-
-                {/* <Button
-                  variant="contained"
-                  color="error"
-                  sx={{
-                    ml: 12,
-                    mt: 3,
-                  }}
-                  onClick={() => deleteImage(image.id)} // Pass the image ID to the delete function
-                >
-                  Delete
-                </Button> */}
               </div>
             </Grid>
           ))}

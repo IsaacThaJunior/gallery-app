@@ -29,4 +29,3 @@ export const POST = async (req: Request) => {
 
   return new Response(JSON.stringify(postedImages), { status: 201 });
 };
-export const DELETE = async (req: Request) => {};
